@@ -7,10 +7,11 @@ class CaseStatus(str, Enum):
     in_progress = "In Progress"
     resolved = "Resolved"
     flagged = "Flagged"
+    needs_info = "Needs Info"
 
 
 class Ticket(BaseModel): 
-    case_id: int
+    case_id: Optional[int] = None
     case_title: str
     case_owner: str
     case_description: str
