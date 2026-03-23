@@ -71,3 +71,20 @@ async def update_ticket(case_id:int, status:str, ai_resolution:str):
         except Exception:
             await session.rollback()
             raise
+
+async def get_tickets():
+    async with AsyncSessionLocal() as session:
+        result = await session.execute(select(TicketModel))
+        tickets = result.scalars().all()
+        return [
+            {
+                "case_id": ticket.id,
+                "case_title": ticket.title,
+                "case_owner": ticket.owner,
+                "case_description": ticket.description,
+                "case_status": ticket.status,
+                "ai_resolution": ticket.ai_resolution,
+            }
+            
+            for ticket in tickets
+        ]

@@ -1,0 +1,129 @@
+2026-03-23 17:26:15,460 - __main__ - INFO - Worker started, waiting for tickets...
+2026-03-23 17:26:20,483 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:26:25,492 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:26:30,500 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:26:35,509 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:26:40,517 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:26:45,526 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:26:50,534 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:26:55,543 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:27:00,552 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:27:05,561 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:27:10,570 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:27:15,580 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:27:20,593 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:27:25,603 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:27:30,611 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:27:35,620 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:27:36,114 - __main__ - INFO - Received ticket : 11
+2026-03-23 17:27:37,113 - __main__ - INFO - Gemini Result : {'tool': 'cancel_order', 'arguments': {'order_no': 40}}
+2026-03-23 17:27:42,234 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:27:47,245 - __main__ - INFO - Worker alive, queue is empty
+2026-03-23 17:27:52,255 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:11:54,490 - __main__ - INFO - Worker started, waiting for tickets...
+2026-03-24 00:11:59,537 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:12:04,550 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:12:09,563 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:12:14,575 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:12:19,588 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:12:24,599 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:12:26,861 - __main__ - INFO - Received ticket : 12
+2026-03-24 00:12:30,549 - __main__ - INFO - Gemini Result : {'tool': 'cancel_order', 'arguments': {'order_no': 1012}}
+2026-03-24 00:12:35,726 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:12:40,738 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:12:45,750 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:12:50,762 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:12:55,774 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:13:00,786 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:13:05,798 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:13:10,811 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:13:15,823 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:13:20,835 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:13:25,847 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:13:30,859 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:13:35,871 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:13:40,885 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:13:45,897 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:13:50,909 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:13:51,923 - __main__ - INFO - Received ticket : 13
+2026-03-24 00:13:54,686 - __main__ - INFO - Gemini Result : {'tool': 'get_order_status', 'arguments': {'order_no': 1001}}
+2026-03-24 00:13:59,730 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:14:04,742 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:14:09,754 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:14:14,766 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:14:19,778 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:14:24,790 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:14:29,802 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:14:34,814 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:14:39,826 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:14:44,838 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:14:49,850 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:14:54,861 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:14:59,873 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:15:04,885 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:15:09,898 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:15:14,911 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:15:19,923 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:15:24,935 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:15:29,947 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:15:34,959 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:15:39,972 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:15:44,985 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:15:49,998 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:15:55,010 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:16:00,021 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:16:02,130 - __main__ - INFO - Received ticket : 14
+2026-03-24 00:16:03,212 - __main__ - INFO - Gemini Result : {'tool': 'update_shipping_address', 'arguments': {'order_no': 1013, 'new_address': '50 Koramangala, Bangalore, Karnataka 560034'}}
+2026-03-24 00:16:08,243 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:16:13,255 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:16:18,266 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:16:23,279 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:16:28,292 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:16:33,304 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:16:37,482 - __main__ - INFO - Received ticket : 15
+2026-03-24 00:16:38,475 - __main__ - INFO - Gemini Result : I can help you with that! Could you please provide me with the order number you would like to cancel?
+2026-03-24 00:16:43,528 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:16:48,540 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:16:53,552 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:16:58,563 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:17:03,576 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:17:08,589 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:17:13,602 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:17:18,614 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:17:19,906 - __main__ - INFO - Received ticket : 16
+2026-03-24 00:17:20,711 - __main__ - INFO - Gemini Result : {'tool': 'cancel_order', 'arguments': {'order_no': 99999}}
+2026-03-24 00:17:25,731 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:17:30,743 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:17:35,755 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:17:40,767 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:17:45,779 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:17:50,791 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:17:55,803 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:18:00,816 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:18:05,829 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:18:10,842 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:18:15,854 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:18:20,866 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:18:25,878 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:18:30,890 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:18:35,902 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:18:40,915 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:18:45,929 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:18:50,942 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:18:55,955 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:19:00,967 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:19:05,979 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:19:10,991 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:19:16,003 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:19:21,015 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:19:26,027 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:19:31,038 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:19:36,050 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:19:41,061 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:19:46,072 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:19:51,084 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:19:56,096 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:20:01,108 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:20:06,120 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:20:11,133 - __main__ - INFO - Worker alive, queue is empty
+2026-03-24 00:20:16,145 - __main__ - INFO - Worker alive, queue is empty
