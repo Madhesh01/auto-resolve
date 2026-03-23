@@ -6,6 +6,9 @@ import os
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+gemini_client = genai.Client(api_key=GEMINI_API_KEY)
+
 SYSTEM_PROMPT = """You are an AI customer support agent for an e-commerce platform.
 
 You will receive a support ticket as a JSON object with these fields:
@@ -27,23 +30,23 @@ Important:
 async def classify_intent(ticket: dict, available_tools: list) -> str | dict:
 
     print(f"Payload to Gemini. Ticket : {ticket}")
-    async with Client().aio as aclient:
-        response = await aclient.models.generate_content(
-            model="gemini-2.5-flash-lite", 
-            contents=f"Resolve this support ticket : {ticket}",
-            config=types.GenerateContentConfig(
-                tools=available_tools,
-                temperature=0.0, 
-                tool_config=types.ToolConfig(
-                    function_calling_config=types.FunctionCallingConfig(
-                        mode=types.FunctionCallingConfigMode.AUTO
-                    )
-                ),
-                system_instruction=SYSTEM_PROMPT,
-                # GeminiSDK calls the function being sent by default. This is to prevent that from happening.
-                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True)
-            ) 
-        )
+    
+    response = await gemini_client.aio.models.generate_content(
+        model="gemini-2.5-flash-lite", 
+        contents=f"Resolve this support ticket : {ticket}",
+        config=types.GenerateContentConfig(
+            tools=available_tools,
+            temperature=0.0, 
+            tool_config=types.ToolConfig(
+                function_calling_config=types.FunctionCallingConfig(
+                    mode=types.FunctionCallingConfigMode.AUTO
+                )
+            ),
+            system_instruction=SYSTEM_PROMPT,
+            # GeminiSDK calls the function being sent by default. This is to prevent that from happening.
+            automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True)
+        ) 
+    )
     
     
     # Use the built-in helper property to return which function to call
