@@ -7,13 +7,13 @@ async def get_order_status(order_no: int) -> dict:
     """ Gets the current order status against a given order number """
     try: 
         async with AsyncSessionLocal() as session:
-            result = await session.execute(select(Order).where(Order.order_no==order_no))
+            result = await session.execute(select(Order.status).where(Order.order_no==order_no))
             order = result.scalar_one_or_none()
 
             if not order:
-                return {"error": True, "message": f"Order {order_no} not found."}
+                return {"error": True, "message": f"Status not found for order {order_no}"}
             
-            return {"error": False, "message": f"Order status : {order.status}"}
+            return {"error": False, "message": f"Order status : {order}"}
     
     except Exception as e:
         return {"error": True, "message": f"Error : {str(e)}"}

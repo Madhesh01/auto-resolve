@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from enum import Enum 
 from typing import Optional
 
@@ -17,4 +17,3 @@ class Ticket(BaseModel):
     case_description: str
     case_status: CaseStatus
     ai_resolution: Optional[str] = None
-
