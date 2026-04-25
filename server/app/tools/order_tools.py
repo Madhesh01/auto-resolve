@@ -2,6 +2,7 @@ from app.db import AsyncSessionLocal
 from app.models.order import Order
 from app.models.ticket import Ticket
 from sqlalchemy import select
+from sqlalchemy.exc import DBAPIError
 
 async def get_order_status(order_no: int) -> dict:
     """ Gets the current order status against a given order number """
@@ -33,6 +34,9 @@ async def cancel_order(order_no: int) -> dict:
             order.status = "cancelled"
             await session.commit()
             return {"error": False, "message": f"Order {order_no} has been cancelled."}
+    
+    except DBAPIError:
+        return {"error":True, "message": "Invalid input"}
     
     except Exception as e:
         return {"error": True, "message": f"Error : {str(e)}"}

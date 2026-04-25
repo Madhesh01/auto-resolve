@@ -41,11 +41,8 @@ async def main():
         while True:
             case_id = None
             try:
-                res = await redis_client.blpop("ticket_queue", timeout=5)
-                # Setting timeout returns None. Need to continue loop if None is returned
-                if res is None:
-                    logger.info("Worker alive, queue is empty")
-                    continue
+                res = await redis_client.blpop("ticket_queue", timeout=0)
+          
 
                 ticket_data = res[1]
                 ticket = json.loads(ticket_data.decode())
