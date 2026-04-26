@@ -4,7 +4,9 @@ sqlalchemy[asyncio]
 psycopg[asyncio]
 python-dotenv
 redis
-google-genai
 pydantic[email]
 alembic
 asyncpg
+langchain-core
+langchain-ollama
+langchain-google-genai

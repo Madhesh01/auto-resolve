@@ -37,7 +37,7 @@ function App() {
 
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(`http://localhost:8000/ticket/${caseId}/status`)
+        const res = await fetch(`/api/ticket/${caseId}/status`)
         const data = await res.json()
 
         if (data.status !== "Pending") {
@@ -56,7 +56,7 @@ function App() {
 
   const fetchCases = async () => {
     try {
-      const res = await fetch("http://localhost:8000/tickets")
+      const res = await fetch("/api/tickets")
       const data = await res.json()
       setCases(data)
     } catch (e) {
@@ -76,7 +76,7 @@ function App() {
     }
 
     try {
-      const res = await fetch("http://localhost:8000/ticket", {
+      const res = await fetch("/api/ticket", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),

@@ -5,6 +5,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import json
 import logging
+import time
 from app.services.ticket_service import update_ticket, TicketNotFound
 
 logging.basicConfig(level=logging.INFO)
@@ -23,7 +24,7 @@ if not logger.handlers:
     logger.addHandler(file_handler)
 
 from app.tools.order_tools import TOOLS
-from app.gemini import classify_intent
+from app.llm import classify_intent
 
 load_dotenv()
 
@@ -47,19 +48,22 @@ async def main():
                 ticket_data = res[1]
                 ticket = json.loads(ticket_data.decode())
                 logger.info(f"Received ticket : {ticket.get('case_id')}")
-                gemini_ticket = {k: v for k, v in ticket.items() if k != "case_id"}
+                llm_ticket = {k: v for k, v in ticket.items() if k != "case_id"}
                 case_id  = ticket.get('case_id')
 
                 if not case_id:
                     raise ValueError("Missing case_id")
 
-                intent_result = await classify_intent(gemini_ticket, TOOLS)
-                # Using below as hardcoded values, not to get ratelimitted by gemini ;)
+                llm_start = time.monotonic()
+                intent_result = await classify_intent(llm_ticket, TOOLS)
+                llm_elapsed = time.monotonic() - llm_start
+                logger.info(f"LLM inference for ticket {case_id} took {llm_elapsed:.2f}s")
+                # Using below as hardcoded values, not to get ratelimitted by the LLM(if using Gemini) ;)
                 # intent_result = {"tool": "update_shipping_address", "arguments": {"new_address": "23 Washington", "order_no": 23}}
-                # intent_result = {"tool": "cancel_order", "arguments": {"order_no": 23}}
-                logger.info(f"Gemini Result : {intent_result}")
+                # intent_result = {'tool': 'get_order_status', 'arguments': {'order_no': 1001}}
+                logger.info(f"LLM Result : {intent_result}")
                 
-                # Check whether request does not have enough info for gemini to process.
+                # Check whether request does not have enough info for the LLM to process.
                 # If so, the type of intent_result will be not be dict
 
                 if isinstance(intent_result, dict):
@@ -82,7 +86,7 @@ async def main():
                         logger.exception("DB commit failed for ticket %s — requeueing", case_id)
                         await redis_client.rpush("ticket_queue", ticket_data)
 
-                # Gemini has requested for additonal response. Do not call tools. 
+                # the LLM has requested for additonal response. Do not call tools. 
                 else:
                     try:
                         await update_ticket(case_id, "Needs Info", intent_result)
