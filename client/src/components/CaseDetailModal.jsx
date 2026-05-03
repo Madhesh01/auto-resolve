@@ -21,6 +21,10 @@ const statusConfig = {
   },
 }
 
+const Spinner = () => (
+  <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+)
+
 const CaseDetailModal = ({ caseData, onClose, pollingCaseId }) => {
   const config = statusConfig[caseData.case_status] || statusConfig.Pending
   const isPolling = pollingCaseId === caseData.case_id
@@ -37,9 +41,12 @@ const CaseDetailModal = ({ caseData, onClose, pollingCaseId }) => {
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none ml-4 flex-shrink-0"
+            className="w-7 h-7 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors ml-4 flex-shrink-0"
           >
-            ×
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
           </button>
         </div>
 
@@ -70,7 +77,7 @@ const CaseDetailModal = ({ caseData, onClose, pollingCaseId }) => {
           {isPolling ? (
             <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl px-4 py-4">
               <p className="text-sm text-blue-700 dark:text-blue-400 flex items-center gap-2">
-                <span className="animate-spin">⟳</span>
+                <Spinner />
                 Auto-resolve is working on this case...
               </p>
             </div>

@@ -8,8 +8,8 @@ The LLM layer is provider-agnostic via LangChain: swap between local inference (
 
 1. User submits a support ticket via the React dashboard
 2. Ticket is saved to PostgreSQL and pushed to a Redis queue
-3. A background worker picks up the ticket and sends it to the LLM for intent classification
-4. The LLM selects the most appropriate tool and extracts order details from the description
+3. A background worker picks up the ticket and passes it to a LangChain ReAct agent
+4. The agent reasons over the ticket, calls tools in sequence (e.g. checks order status before acting), and extracts order details from the description
 5. The tool executes against PostgreSQL and the ticket is updated with the resolution
 6. The dashboard polls for status updates and reflects the result in real time
 
@@ -23,7 +23,8 @@ New Case (React) → POST /ticket → PostgreSQL (Pending) → Redis Queue → W
 - **Backend** — FastAPI
 - **Database** — PostgreSQL with SQLAlchemy (async)
 - **Queue** — Redis
-- **AI** — LangChain abstraction over Google Gemini 2.5 Flash Lite (cloud) or Ollama/qwen2.5:7b (local)
+- **AI** — LangChain ReAct agent over Google Gemini 2.5 Flash Lite (cloud) or Ollama/qwen2.5:7b (local)
+- **Observability** — LangSmith for agent trace visibility
 - **Reverse Proxy** — nginx
 - **Containerization** — Docker + docker-compose
 - **Deployment** — AWS EC2 (t3.small, Ubuntu 24.04)
@@ -57,7 +58,8 @@ auto-resolve/
 │   │   └── components/
 │   │       ├── CaseQueue.jsx       # Filterable ticket list
 │   │       ├── CreateCaseModal.jsx # New ticket form with simulate button
-│   │       └── CaseDetailModal.jsx # Ticket detail + AI resolution display
+│   │       ├── CaseDetailModal.jsx # Ticket detail + AI resolution display
+│   │       └── OrdersTable.jsx     # Orders view with status badges
 │   ├── nginx.conf                  # nginx config (static files + /api proxy)
 │   ├── Dockerfile.client           # Multi-stage: node builder → nginx
 │   ├── vite.config.js              # /api proxy for local dev
@@ -80,10 +82,12 @@ auto-resolve/
         ├── routes/tickets.py       # POST /ticket, GET /ticket/{id}/status, GET /tickets
         ├── services/
         │   └── ticket_service.py   # All DB reads/writes + queue push
+        ├── agents/
+        │   └── ticket_agent.py     # LangChain ReAct agent + system prompt
         ├── tools/
-        │   └── order_tools.py      # get_order_status, cancel_order, update_shipping_address
+        │   └── order_tools.py      # 6 async tool functions + TOOLS list
         └── worker/
-            └── main.py             # BLPOP loop → LLM → tool → DB update
+            └── main.py             # BLPOP loop → agent → DB update
 ```
 
 ## API Endpoints
@@ -93,6 +97,7 @@ auto-resolve/
 | `POST` | `/ticket` | Submit a new support ticket |
 | `GET` | `/ticket/{id}/status` | Poll ticket status and AI resolution |
 | `GET` | `/tickets` | Fetch all tickets for the queue |
+| `GET` | `/orders` | Fetch all orders with status and price |
 
 ### POST /ticket — Request body
 
@@ -145,6 +150,9 @@ auto-resolve/
 | `get_order_status` | Returns the current status of an order |
 | `cancel_order` | Cancels an order |
 | `update_shipping_address` | Updates the shipping address of an order |
+| `request_refund` | Processes a refund for a delivered or cancelled order |
+| `escalate_to_human` | Escalates the ticket to a human agent with a reason |
+| `report_damaged_item` | Files a damage report for a delivered order |
 
 ## Setup
 
@@ -240,8 +248,11 @@ Edit `N` at the top of the script to change ticket count.
 - [x] Dark mode
 - [x] Docker + docker-compose for one-command setup
 - [x] AWS EC2 deployment behind nginx
+- [x] LangChain ReAct agent with multi-step reasoning
+- [x] Expanded tool suite (refund, escalation, damage reporting)
+- [x] LangSmith agent trace observability
+- [x] Orders dashboard with live status table
 - [ ] Elastic IP for stable public URL
 - [ ] GitHub Actions + DockerHub CI/CD pipeline
-- [ ] Support for more tools (refund, escalation, FAQ lookup)
 - [ ] pgvector for semantic ticket deduplication
 - [ ] Authentication for user access

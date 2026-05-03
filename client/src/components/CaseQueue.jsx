@@ -3,27 +3,47 @@ import { useState } from "react"
 const statusConfig = {
   Resolved: {
     badge: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-400",
-    icon: "✓",
-    iconBg: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-400",
+    iconBg: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400",
+    icon: (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+    ),
   },
   Flagged: {
     badge: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-400",
-    icon: "!",
-    iconBg: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-400",
+    iconBg: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400",
+    icon: (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+        <line x1="12" y1="9" x2="12" y2="13" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg>
+    ),
   },
   "Needs Info": {
     badge: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-400",
-    icon: "?",
-    iconBg: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-400",
+    iconBg: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400",
+    icon: (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg>
+    ),
   },
   Pending: {
     badge: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-400",
-    icon: "⋯",
-    iconBg: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-400",
+    iconBg: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400",
+    icon: null,
   },
 }
 
 const TABS = ["All", "Pending", "Resolved", "Flagged", "Needs Info"]
+
+const Spinner = () => (
+  <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+)
 
 const CaseQueue = ({ cases, onCaseClick, onNewCase, pollingCaseId }) => {
   const [activeTab, setActiveTab] = useState("All")
@@ -63,7 +83,6 @@ const CaseQueue = ({ cases, onCaseClick, onNewCase, pollingCaseId }) => {
 
   return (
     <div>
-      {/* Filter tabs */}
       <div className="flex gap-1 border-b border-gray-300 dark:border-gray-700 mb-6">
         {TABS.map((tab) => (
           <button
@@ -89,7 +108,6 @@ const CaseQueue = ({ cases, onCaseClick, onNewCase, pollingCaseId }) => {
         ))}
       </div>
 
-      {/* Case list */}
       <div className="flex flex-col gap-3">
         {filteredCases.length === 0 ? (
           <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-12">
@@ -106,8 +124,8 @@ const CaseQueue = ({ cases, onCaseClick, onNewCase, pollingCaseId }) => {
                 onClick={() => onCaseClick(c)}
                 className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4 flex items-center gap-4 cursor-pointer hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-sm transition-all"
               >
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0 ${config.iconBg}`}>
-                  {isPolling ? <span className="animate-spin">⟳</span> : config.icon}
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${config.iconBg}`}>
+                  {isPolling ? <Spinner /> : config.icon}
                 </div>
 
                 <div className="flex-1 min-w-0">
@@ -115,7 +133,7 @@ const CaseQueue = ({ cases, onCaseClick, onNewCase, pollingCaseId }) => {
                     {c.case_title}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                    Owner: {c.case_owner} · #{c.case_id}
+                    {c.case_owner} · #{c.case_id}
                   </p>
                 </div>
 
