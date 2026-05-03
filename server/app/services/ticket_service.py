@@ -72,6 +72,21 @@ async def update_ticket(case_id:int, status:str, ai_resolution:str):
             await session.rollback()
             raise
 
+async def get_orders():
+    from app.models.order import Order
+    async with AsyncSessionLocal() as session:
+        result = await session.execute(select(Order).order_by(Order.order_no))
+        orders = result.scalars().all()
+        return [
+            {
+                "order_no": order.order_no,
+                "address": order.address,
+                "status": order.status,
+                "price": float(order.price),
+            }
+            for order in orders
+        ]
+
 async def get_tickets():
     async with AsyncSessionLocal() as session:
         result = await session.execute(select(TicketModel))

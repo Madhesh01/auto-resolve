@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status
 from app.schemas.ticket import Ticket
-from app.services.ticket_service import push_ticket_to_queue, insert_ticket, get_ticket_status, get_tickets
+from app.services.ticket_service import push_ticket_to_queue, insert_ticket, get_ticket_status, get_tickets, get_orders
 
 
 router = APIRouter()
@@ -23,3 +23,8 @@ async def get_ticket(id: int):
 async def get_all_tickets():
     tickets = await get_tickets()
     return tickets
+
+@router.get('/orders')
+async def get_all_orders():
+    orders = await get_orders()
+    return orders
