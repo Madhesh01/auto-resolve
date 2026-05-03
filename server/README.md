@@ -1,16 +1,17 @@
-# auto-resolve
-An AI-powered customer support agent that automatically classifies and resolves support tickets using Google Gemini, FastAPI, PostgreSQL, and Redis.
+# auto-resolve — server
+
+FastAPI backend, background worker, and AI agent for automatically classifying and resolving customer support tickets.
 
 ## How it works
 
-1. Customer submits a support ticket via `POST /ticket`
+1. User submits a support ticket via `POST /ticket`
 2. Ticket is saved to PostgreSQL and pushed to a Redis queue
-3. A background worker picks up the ticket and sends it to Gemini for intent classification
-4. Gemini selects the most appropriate tool and extracts order details from the ticket description
-5. The tool executes against PostgreSQL and the ticket is updated with the resolution
+3. A background worker picks up the ticket and passes it to the LangChain agent
+4. The agent selects the appropriate tool, executes it, and synthesizes a resolution
+5. The ticket is updated in PostgreSQL with the status and AI-generated response
 
 ```
-POST /ticket → PostgreSQL (Pending) → Redis Queue → Worker → Gemini → Tool → PostgreSQL (Resolved)
+POST /ticket → PostgreSQL (Pending) → Redis Queue → Worker → Agent → Tool → PostgreSQL (Resolved/Flagged/Needs Info)
 ```
 
 ## Tech Stack
@@ -18,42 +19,44 @@ POST /ticket → PostgreSQL (Pending) → Redis Queue → Worker → Gemini → 
 - **Backend** — FastAPI
 - **Database** — PostgreSQL with SQLAlchemy (async)
 - **Queue** — Redis
-- **AI** — Google Gemini 2.0 Flash
-- **Frontend** — React + Tailwind (in progress)
-- **Containerization** — Docker (in progress)
+- **AI** — LangChain agent over Ollama (local) or Google Gemini (cloud), swapped via `LLM_PROVIDER`
 
 ## Project Structure
 
 ```
-auto-resolve/
+server/
 ├── app/
-│   ├── main.py               # FastAPI app entry point
-│   ├── db.py                 # SQLAlchemy async engine and session
-│   ├── redis.py              # Redis client
-│   ├── gemini.py             # Gemini intent classification
+│   ├── main.py                 # FastAPI app entry point + CORS + lifespan
+│   ├── db.py                   # Async SQLAlchemy engine and session
+│   ├── redis.py                # Async Redis client
+│   ├── llm.py                  # LangChain wrapper — Ollama or Gemini via LLM_PROVIDER
+│   ├── agents/
+│   │   └── ticket_agent.py     # LangChain agent with tools attached
 │   ├── routes/
-│   │   └── tickets.py        # POST /ticket, GET /ticket/{id}/status
+│   │   └── tickets.py          # POST /ticket, GET /ticket/{id}/status, GET /tickets
 │   ├── models/
-│   │   ├── ticket.py         # SQLAlchemy Ticket model
-│   │   └── order.py          # SQLAlchemy Order model
+│   │   ├── ticket.py           # SQLAlchemy Ticket model
+│   │   └── order.py            # SQLAlchemy Order model
 │   ├── schemas/
-│   │   └── ticket.py         # Pydantic schemas
+│   │   └── ticket.py           # Pydantic schemas
 │   ├── services/
-│   │   └── ticket_service.py # insert_ticket, update_ticket, get_ticket_status
+│   │   └── ticket_service.py   # insert_ticket, update_ticket, get_ticket_status, get_tickets
 │   └── tools/
-│       └── order_tools.py    # get_order_status, cancel_order, update_shipping_address
+│       └── order_tools.py      # get_order_status, cancel_order, update_shipping_address
 ├── worker/
-│   └── main.py               # Redis consumer loop + tool execution
-├── .env
-└── docker-compose.yml
+│   └── main.py                 # BLPOP loop → agent → DB update
+├── init.sql                    # Seeds orders table on first postgres boot
+├── test_pipeline.py            # Async load test script
+└── requirements.txt
 ```
 
 ## API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/ticket` | Submit a new support ticket |
-| GET | `/ticket/{id}/status` | Poll ticket status and resolution |
+| `POST` | `/ticket` | Submit a new support ticket |
+| `GET` | `/ticket/{id}/status` | Poll ticket status and AI resolution |
+| `GET` | `/tickets` | Fetch all tickets |
 
 ### POST /ticket
 
@@ -70,7 +73,8 @@ auto-resolve/
 
 ```json
 {
-  "status": "Resolved"
+  "status": "Resolved",
+  "ai_resolution": "Order #40 has been successfully cancelled."
 }
 ```
 
@@ -80,8 +84,8 @@ auto-resolve/
 |--------|-------------|
 | `Pending` | Ticket received, queued for processing |
 | `Resolved` | Tool executed successfully |
-| `Flagged` | Tool executed but encountered an error (e.g. order not found) |
-| `Needs Info` | Gemini could not extract enough information to act |
+| `Flagged` | Tool ran but encountered an error (e.g. order not found) |
+| `Needs Info` | Agent could not extract enough information to act |
 
 ## Available Tools
 
@@ -94,15 +98,16 @@ auto-resolve/
 ## Setup
 
 ### Prerequisites
+
 - Python 3.11+
 - PostgreSQL
 - Redis
+- Ollama (if using `LLM_PROVIDER=ollama`) or a Gemini API key
 
 ### Installation
 
 ```bash
-git clone https://github.com/yourusername/auto-resolve.git
-cd auto-resolve
+cd server
 python -m venv env
 source env/bin/activate
 pip install -r requirements.txt
@@ -110,48 +115,38 @@ pip install -r requirements.txt
 
 ### Environment Variables
 
-Create a `.env` file:
+Create a `.env` file inside `server/`:
 
 ```
-DATABASE_URL=postgresql+asyncpg://user:password@localhost/autoresolve
+DATABASE_URL=postgresql+asyncpg://postgres:<password>@localhost:5432/autoresolve
 REDIS_URL=redis://localhost:6379
-GEMINI_API_KEY=your_gemini_api_key
-```
 
-### Database Setup
+# LLM — set to "ollama" or "gemini"
+LLM_PROVIDER=gemini
+GEMINI_API_KEY=<your key>
+GEMINI_MODEL=gemini-2.5-flash-lite
 
-```sql
-CREATE TABLE tickets (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR NOT NULL,
-    owner VARCHAR NOT NULL,
-    description VARCHAR NOT NULL,
-    status VARCHAR NOT NULL,
-    ai_resolution VARCHAR
-);
-
-CREATE TABLE orders (
-    order_no INT PRIMARY KEY,
-    address VARCHAR NOT NULL,
-    status VARCHAR NOT NULL
-);
+# Only needed when LLM_PROVIDER=ollama
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_MODEL=qwen2.5:7b
 ```
 
 ### Running
 
 Start the FastAPI server:
+
 ```bash
 uvicorn app.main:app --reload
 ```
 
 Start the worker in a separate terminal:
+
 ```bash
 python worker/main.py
 ```
 
-## Roadmap
+### Load testing
 
-- [ ] React frontend with ticket submission and status polling
-- [ ] Docker + docker-compose for one-command setup
-- [ ] Support for more tools (refund, escalation, FAQ lookup)
-- [ ] pgvector for semantic ticket deduplication
+```bash
+python test_pipeline.py    # default: 20 tickets, edit N at the top to change
+```
